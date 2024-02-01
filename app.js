@@ -1,4 +1,4 @@
-console.log("Hello World!");
+import { GameInstance } from "./ressources/classes/GameInstance.js";
 
 window.onload = function () {
     let canvas = document.getElementById("gameView");
@@ -15,11 +15,7 @@ window.onload = function () {
         const gameViewHeight = canvas.height;
         const gameViewWidth = canvas.width;
 
-        ctx.fillStyle = "blue";
-        ctx.fillRect(0, 0, gameViewHeight, gameViewWidth);
-
-        ctx.fillStyle = "red";
-        ctx.fillRect(0, 0, 100, 100);
+        const gameInstance = new GameInstance(gameViewHeight, gameViewWidth, ctx);
     } else {
     }
 }
