@@ -52,6 +52,12 @@ export class GameInstance {
     updateView() {
         setInterval(() => {
             this.drawGameView();
+
+            if (this.fireEntityList.length > 0) {
+                this.enemyEntityList.forEach(enemyEntity => {
+                    this.checkFireCollide(enemyEntity);
+                });
+            }
         }, 1000 / 60);
     }
 
@@ -109,5 +115,22 @@ export class GameInstance {
 
     killFireEntity(fireEntity) {
         this.fireEntityList.splice(this.fireEntityList.indexOf(fireEntity), 1);
+    }
+
+    killEnemyEntity(enemyEntity) {
+        this.enemyEntityList.splice(this.enemyEntityList.indexOf(enemyEntity), 1);
+    }
+
+    checkFireCollision(enemyEntity) {
+        this.fireEntityList.forEach(fireEntity => {
+            const fireInXRange = fireEntity.xPos > enemyEntity.xPos && fireEntity.xPos < enemyEntity.xPos + enemyEntity.sprite.width;
+            const fireInYRange = fireEntity.yPos > enemyEntity.yPos && fireEntity.yPos < enemyEntity.yPos + enemyEntity.sprite.height * 3 / 4;
+
+            if (fireInXRange && fireInYRange) {
+                this.killEnemyEntity(enemyEntity);
+                this.killFireEntity(fireEntity);
+                this.spawnEnemy();
+            }
+        });
     }
 }
