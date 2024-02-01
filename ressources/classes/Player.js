@@ -17,7 +17,7 @@ export class Player {
         this.score = score;
         this.gameInstance = gameInstance;
 
-        this.sprite.src = '/ressources/sprites/player/player.png';
+        this.sprite.src = '/ressources/sprites/player_test/player.png';
 
         this.keyboardListeners();
     }
@@ -39,17 +39,20 @@ export class Player {
     }
 
     updatePosition() {
+        const sideXLimit = this.sprite.width / 2;
+        const sideYLimit = this.sprite.height / 2;
+
         //Calculer la nouvelle position du joueur en fonction des touches pressées
         if (this.keysPressed["ArrowUp"] && this.yPos > 0) {
             this.yPos -= this.speed;
         }
-        if (this.keysPressed["ArrowDown"] && this.yPos < this.gameInstance.gameViewHeight - this.sprite.height) {
+        if (this.keysPressed["ArrowDown"] && this.yPos < this.gameInstance.gameViewHeight - this.sprite.height + sideYLimit) {
             this.yPos += this.speed;
         }
-        if (this.keysPressed["ArrowLeft"] && this.xPos > 0) {
+        if (this.keysPressed["ArrowLeft"] && this.xPos > 0 - sideXLimit) {
             this.xPos -= this.speed;
         }
-        if (this.keysPressed["ArrowRight"] && this.xPos < this.gameInstance.gameViewWidth - this.sprite.width) {
+        if (this.keysPressed["ArrowRight"] && this.xPos < this.gameInstance.gameViewWidth - this.sprite.width + sideXLimit) {
             this.xPos += this.speed;
         }
     }
