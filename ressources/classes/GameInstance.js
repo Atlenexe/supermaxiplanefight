@@ -42,7 +42,7 @@ export class GameInstance {
         this.enemyEntityList.push(enemy);
 
         const enemySpawnX = Math.random() * (this.gameViewWidth - enemy.sprite.width);
-        const enemySpawnY = -100;
+        const enemySpawnY = -enemy.sprite.height - 100;
 
         enemy.xPos = enemySpawnX;
         enemy.yPos = enemySpawnY;
@@ -93,7 +93,7 @@ export class GameInstance {
     killEntities() {
         setInterval(() => {
             this.fireEntityList.forEach(fireEntity => {
-                if (fireEntity.yPos < -100) {
+                if (fireEntity.yPos < -fireEntity.sprite) {
                     this.killFireEntity(fireEntity);
                 }
             });
@@ -101,6 +101,7 @@ export class GameInstance {
             this.enemyEntityList.forEach(enemyEntity => {
                 if (enemyEntity.yPos > this.gameViewHeight + enemyEntity.sprite.height) {
                     this.enemyEntityList.splice(this.enemyEntityList.indexOf(enemyEntity), 1);
+                    this.spawnEnemy();
                 }
             });
         }, 1000);

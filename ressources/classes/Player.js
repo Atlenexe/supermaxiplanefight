@@ -8,6 +8,8 @@ export class Player {
     xPos = 0;
     yPos = 0;
 
+    antiSpam = false;
+
     sprite = new Image();
 
     keysPressed = {};
@@ -34,14 +36,19 @@ export class Player {
         //Stocker l'état des touches
         this.keysPressed[event.key] = true;
 
-        if (this.keysPressed[' ']) {
+        if (this.keysPressed[' '] && !this.antiSpam) {
             this.shoot();
+            this.antiSpam = true;
         }
     }
 
     handleKeyUp(event) {
         //Mettre à jour l'état des touches lorsqu'elles sont relâchées
         this.keysPressed[event.key] = false;
+
+        if (event.key === ' ') {
+            this.antiSpam = false;
+        }
     }
 
     updatePosition() {
