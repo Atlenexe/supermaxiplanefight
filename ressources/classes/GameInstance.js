@@ -94,13 +94,13 @@ export class GameInstance {
         setInterval(() => {
             this.fireEntityList.forEach(fireEntity => {
                 if (fireEntity.yPos < -100) {
-                    this.fireEntityList.splice(this.fireEntityList.indexOf(fireEntity), 1);
+                    this.killFireEntity(fireEntity);
                 }
             });
 
             this.enemyEntityList.forEach(enemyEntity => {
                 if (enemyEntity.yPos > this.gameViewHeight + enemyEntity.sprite.height) {
-                    this.killFireEntity(enemyEntity);
+                    this.enemyEntityList.splice(this.enemyEntityList.indexOf(enemyEntity), 1);
                 }
             });
         }, 1000);
