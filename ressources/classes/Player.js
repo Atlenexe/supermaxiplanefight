@@ -2,7 +2,7 @@ import { Fire } from './Fire.js';
 
 export class Player {
     speed = 8;
-    lives = 0;
+    life = 0;
     score = 0;
 
     xPos = 0;

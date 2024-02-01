@@ -1,4 +1,5 @@
 import { Player } from "./Player.js";
+import { Enemy } from "./Enemy.js";
 
 export class GameInstance {
     gameViewHeight = 0;
@@ -6,6 +7,7 @@ export class GameInstance {
     player = null;
     ctx = null;
     fireEntityList = [];
+    enemyEntityList = [];
 
     constructor(gameViewHeight, gameViewWidth, ctx) {
         this.gameViewHeight = gameViewHeight;
@@ -14,18 +16,36 @@ export class GameInstance {
 
         this.initEntities();
         this.updateView();
-        this.killFire();
+        this.killEntities();
     }
 
     //Initialiser les entités
     initEntities() {
+        this.spawnPlayer();
+        this.spawnEnemy();
+    }
+
+    spawnPlayer() {
         const playerSpawnX = this.gameViewWidth / 2;
         const playerSpawnY = this.gameViewHeight;
 
         const player = new Player(0, 0, this);
+
         player.xPos = playerSpawnX - player.sprite.width / 2;
         player.yPos = playerSpawnY - player.sprite.height;
         this.player = player;
+    }
+
+    spawnEnemy() {
+        const enemy = new Enemy(0, 0);
+
+        this.enemyEntityList.push(enemy);
+
+        const enemySpawnX = Math.random() * (this.gameViewWidth - enemy.sprite.width);
+        const enemySpawnY = -100;
+
+        enemy.xPos = enemySpawnX;
+        enemy.yPos = enemySpawnY;
     }
 
     //Actualiser l'affichage 60 fois par seconde
@@ -44,6 +64,7 @@ export class GameInstance {
         //Afficher les entités
         this.drawPlayer();
         this.drawFires();
+        this.drawEnemies();
     }
 
     //Afficher le joueur
@@ -61,14 +82,31 @@ export class GameInstance {
         });
     }
 
+    //Afficher les ennemis
+    drawEnemies() {
+        this.enemyEntityList.forEach(enemyEntity => {
+            this.ctx.drawImage(enemyEntity.sprite, enemyEntity.xPos, enemyEntity.yPos);
+        });
+    }
+
     //Tuer les entités hors de l'écran
-    killFire() {
+    killEntities() {
         setInterval(() => {
             this.fireEntityList.forEach(fireEntity => {
                 if (fireEntity.yPos < -100) {
                     this.fireEntityList.splice(this.fireEntityList.indexOf(fireEntity), 1);
                 }
             });
+
+            this.enemyEntityList.forEach(enemyEntity => {
+                if (enemyEntity.yPos > this.gameViewHeight + enemyEntity.sprite.height) {
+                    this.killFireEntity(enemyEntity);
+                }
+            });
         }, 1000);
+    }
+
+    killFireEntity(fireEntity) {
+        this.fireEntityList.splice(this.fireEntityList.indexOf(fireEntity), 1);
     }
 }
