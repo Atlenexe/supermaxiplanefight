@@ -1,3 +1,5 @@
+import { Fire } from './Fire.js';
+
 export class Player {
     speed = 8;
     lives = 0;
@@ -31,6 +33,10 @@ export class Player {
     handleKeyDown(event) {
         //Stocker l'état des touches
         this.keysPressed[event.key] = true;
+
+        if (this.keysPressed[' ']) {
+            this.shoot();
+        }
     }
 
     handleKeyUp(event) {
@@ -43,17 +49,21 @@ export class Player {
         const sideYLimit = this.sprite.height / 2;
 
         //Calculer la nouvelle position du joueur en fonction des touches pressées
-        if (this.keysPressed["ArrowUp"] && this.yPos > 0) {
+        if (this.keysPressed['ArrowUp'] && this.yPos > 0) {
             this.yPos -= this.speed;
         }
-        if (this.keysPressed["ArrowDown"] && this.yPos < this.gameInstance.gameViewHeight - this.sprite.height + sideYLimit) {
+        if (this.keysPressed['ArrowDown'] && this.yPos < this.gameInstance.gameViewHeight - this.sprite.height + sideYLimit) {
             this.yPos += this.speed;
         }
-        if (this.keysPressed["ArrowLeft"] && this.xPos > 0 - sideXLimit) {
+        if (this.keysPressed['ArrowLeft'] && this.xPos > 0 - sideXLimit) {
             this.xPos -= this.speed;
         }
-        if (this.keysPressed["ArrowRight"] && this.xPos < this.gameInstance.gameViewWidth - this.sprite.width + sideXLimit) {
+        if (this.keysPressed['ArrowRight'] && this.xPos < this.gameInstance.gameViewWidth - this.sprite.width + sideXLimit) {
             this.xPos += this.speed;
         }
+    }
+
+    shoot() {
+        this.gameInstance.fireEntityList.push(new Fire(this.xPos + this.sprite.width / 2, this.yPos - this.sprite.height / 3));
     }
 }

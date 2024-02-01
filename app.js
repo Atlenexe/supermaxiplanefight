@@ -3,8 +3,8 @@ import { GameInstance } from "./ressources/classes/GameInstance.js";
 window.onload = function () {
     let canvas = document.getElementById("gameView");
 
-    const canvasHeight = 600;
-    const canvasWidth = 600;
+    const canvasHeight = document.body.clientHeight;
+    const canvasWidth = 480;
 
     canvas.height = canvasHeight;
     canvas.width = canvasWidth;
