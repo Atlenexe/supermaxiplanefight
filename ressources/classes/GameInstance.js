@@ -1,5 +1,6 @@
 import { Player } from "./Player.js";
 import { Enemy } from "./Enemy.js";
+import { GameStates } from "../enums/GameStates.js";
 
 export class GameInstance {
     gameViewHeight = 0;
@@ -9,14 +10,22 @@ export class GameInstance {
     fireEntityList = [];
     enemyEntityList = [];
 
+    gameState = GameStates.menu;
+
     constructor(gameViewHeight, gameViewWidth, ctx) {
         this.gameViewHeight = gameViewHeight;
         this.gameViewWidth = gameViewWidth;
         this.ctx = ctx;
 
-        this.initEntities();
+        this.startGame();
+
         this.updateView();
         this.killEntities();
+    }
+
+    startGame() {
+        this.gameState = GameStates.inGame;
+        this.initEntities();
     }
 
     //Initialiser les entités
@@ -124,7 +133,7 @@ export class GameInstance {
         this.fireEntityList.forEach(fireEntity => {
             //Hitbox de l'ennemi
             const fireInXRange = fireEntity.xPos > enemyEntity.xPos && fireEntity.xPos < enemyEntity.xPos + enemyEntity.sprite.width;
-            const fireInYRange = fireEntity.yPos > enemyEntity.yPos + enemyEntity.sprite.height * 1/2 && fireEntity.yPos < enemyEntity.yPos + enemyEntity.sprite.height * 3 / 4;
+            const fireInYRange = fireEntity.yPos > enemyEntity.yPos + enemyEntity.sprite.height * 1 / 2 && fireEntity.yPos < enemyEntity.yPos + enemyEntity.sprite.height * 3 / 4;
 
             if (fireInXRange && fireInYRange) {
                 this.killEnemyEntity(enemyEntity);
@@ -136,8 +145,8 @@ export class GameInstance {
 
     checkPlayerCollision(enemyEntity) {
         //Hitbox de l'ennemi
-        const playerInXRange = this.player.xPos + this.player.sprite.width > enemyEntity.xPos + enemyEntity.sprite.width * 3/4 && this.player.xPos < enemyEntity.xPos + enemyEntity.sprite.width - enemyEntity.sprite.width * 3/4;
-        const playerInYRange = this.player.yPos + this.player.sprite.height * 1/4 > enemyEntity.yPos && this.player.yPos < enemyEntity.yPos + enemyEntity.sprite.height;
+        const playerInXRange = this.player.xPos + this.player.sprite.width > enemyEntity.xPos + enemyEntity.sprite.width * 3 / 4 && this.player.xPos < enemyEntity.xPos + enemyEntity.sprite.width - enemyEntity.sprite.width * 3 / 4;
+        const playerInYRange = this.player.yPos + this.player.sprite.height * 1 / 4 > enemyEntity.yPos && this.player.yPos < enemyEntity.yPos + enemyEntity.sprite.height;
 
         if (playerInXRange && playerInYRange) {
             this.killEnemyEntity(enemyEntity);
