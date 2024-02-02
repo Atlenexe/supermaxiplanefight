@@ -146,7 +146,25 @@ export class GameInstance {
     drawEnemies() {
         this.enemyEntityList.forEach(enemyEntity => {
             this.ctx.drawImage(enemyEntity.sprite, enemyEntity.xPos, enemyEntity.yPos);
+            this.drawLifeBar(enemyEntity);
         });
+    }
+
+    drawLifeBar(enemyEntity) {
+        const lifeBarWidth = 80;
+        const lifeBarHeight = 11;
+
+        const shadowOffset = 2;
+
+        const lifeBarXPos = enemyEntity.xPos + enemyEntity.sprite.width / 2 - lifeBarWidth / 2;
+
+        let lifeBarValueWidth = lifeBarWidth * enemyEntity.life / enemyEntity.maxLife;
+
+        this.ctx.fillStyle = '#403224';
+        this.ctx.fillRect(lifeBarXPos - shadowOffset, enemyEntity.yPos - lifeBarHeight * 2 + shadowOffset, lifeBarWidth, lifeBarHeight);
+
+        this.ctx.fillStyle = '#f42574';
+        this.ctx.fillRect(lifeBarXPos + shadowOffset, enemyEntity.yPos - lifeBarHeight * 2 - shadowOffset, lifeBarValueWidth, lifeBarHeight);
     }
 
     //Tuer les entités hors de l'écran

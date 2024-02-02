@@ -1,6 +1,7 @@
 export class Enemy {
     speed = 3;
-    life = 2;
+    maxLife = 2;
+    life = 0;
 
     xPos = 0;
     yPos = 0;
@@ -8,6 +9,7 @@ export class Enemy {
     sprite = new Image();
 
     constructor(xPos, yPos) {
+        this.life = this.maxLife;
         this.xPos = xPos;
         this.yPos = yPos;
 
