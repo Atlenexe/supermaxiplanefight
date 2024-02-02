@@ -55,7 +55,7 @@ export class GameInstance {
 
             if (this.fireEntityList.length > 0) {
                 this.enemyEntityList.forEach(enemyEntity => {
-                    this.checkFireCollide(enemyEntity);
+                    this.checkFireCollision(enemyEntity);
                 });
             }
         }, 1000 / 60);

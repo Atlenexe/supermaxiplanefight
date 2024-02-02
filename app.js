@@ -4,7 +4,8 @@ window.onload = function () {
     let canvas = document.getElementById("gameView");
 
     const canvasHeight = document.body.clientHeight;
-    const canvasWidth = 480;
+    //const canvasWidth = 480;
+    const canvasWidth = document.body.clientWidth;
 
     canvas.height = canvasHeight;
     canvas.width = canvasWidth;
