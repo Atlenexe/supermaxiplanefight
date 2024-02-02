@@ -1,7 +1,7 @@
-import { GameInstance } from "./ressources/classes/GameInstance.js";
+import { GameInstance } from './ressources/classes/GameInstance.js';
 
 window.onload = function () {
-    let canvas = document.getElementById("gameView");
+    let canvas = document.getElementById('gameView');
 
     const canvasHeight = document.body.clientHeight;
     //const canvasWidth = 480;
@@ -11,7 +11,7 @@ window.onload = function () {
     canvas.width = canvasWidth;
 
     if (canvas.getContext) {
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext('2d', { alpha: false });
 
         const gameViewHeight = canvas.height;
         const gameViewWidth = canvas.width;

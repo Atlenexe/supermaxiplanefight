@@ -15,9 +15,7 @@ export class Player {
     gameInstance = null;
     keyboard = null;
 
-    constructor(lives, score, gameInstance, keyboard) {
-        this.lives = lives;
-        this.score = score;
+    constructor(gameInstance, keyboard) {
         this.gameInstance = gameInstance;
         this.keyboard = keyboard;
 

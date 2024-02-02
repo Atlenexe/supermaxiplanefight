@@ -1,7 +1,7 @@
-import { Player } from "./Player.js";
-import { Enemy } from "./Enemy.js";
+import { Player } from './Player.js';
+import { Enemy } from './Enemy.js';
 import { keyboard } from './KeyBoard.js';
-import { GameStates } from "../enums/GameStates.js";
+import { GameStates } from '../enums/GameStates.js';
 
 export class GameInstance {
     gameViewHeight = 0;
@@ -40,7 +40,7 @@ export class GameInstance {
         const playerSpawnX = this.gameViewWidth / 2;
         const playerSpawnY = this.gameViewHeight;
 
-        const player = new Player(-150, -100, this, this.keyboard);
+        const player = new Player(this, this.keyboard);
         this.player = player;
 
         //On attend que l'image du joueur soit chargée pour définir sa position
@@ -94,13 +94,36 @@ export class GameInstance {
     //Afficher le jeux
     drawGameView() {
         this.ctx.clearRect(0, 0, this.gameViewWidth, this.gameViewHeight);
-        this.ctx.fillStyle = "blue";
+        this.ctx.fillStyle = 'blue';
         this.ctx.fillRect(0, 0, this.gameViewWidth, this.gameViewHeight);
 
         if (this.gameState === GameStates.inGame) {
-            this.drawPlayer();
-            this.drawFires();
             this.drawEnemies();
+            this.drawFires();
+            this.drawPlayer();
+        }
+
+        this.drawUi();
+    }
+
+    drawUi() {
+        this.ctx.font = '30px BrokenConsoleBold';
+        this.ctx.fillStyle = 'white';
+
+        switch (this.gameState) {
+            case GameStates.menu:
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText('Press ENTER to play', this.gameViewWidth / 2, this.gameViewHeight / 2);
+                break;
+            case GameStates.inGame:
+                this.ctx.textAlign = 'start';
+                this.ctx.fillText('Score : ' + this.player.score, 10, 50);
+                this.ctx.fillText('Life : ' + this.player.life, 10, 100);
+                break;
+            case GameStates.gameOver:
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText('Game over, press ENTER to restart', this.gameViewWidth / 2, this.gameViewHeight / 2);
+                break;
         }
     }
 
