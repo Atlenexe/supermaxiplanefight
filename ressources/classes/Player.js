@@ -1,4 +1,5 @@
 import { Fire } from './Fire.js';
+import keyBinds from '../config/keyBinds.json' assert { type: 'json' };
 
 export class Player {
     speed = 8;
@@ -36,7 +37,7 @@ export class Player {
         //Stocker l'état des touches
         this.keysPressed[event.key] = true;
 
-        if (this.keysPressed[' '] && !this.antiSpam) {
+        if (this.checkFromKeyBinds('shoot') && !this.antiSpam) {
             this.shoot();
             this.antiSpam = true;
         }
@@ -46,9 +47,14 @@ export class Player {
         //Mettre à jour l'état des touches lorsqu'elles sont relâchées
         this.keysPressed[event.key] = false;
 
-        if (event.key === ' ') {
+        if (keyBinds['shoot'].includes(event.key)) {
             this.antiSpam = false;
         }
+    }
+
+    //Vérifier si une touche est pressée depuis le fichier config de touches
+    checkFromKeyBinds(key) {
+        return keyBinds[key].some(bind => this.keysPressed[bind]);
     }
 
     updatePosition() {
@@ -56,16 +62,16 @@ export class Player {
         const sideYLimit = this.sprite.height / 2;
 
         //Calculer la nouvelle position du joueur en fonction des touches pressées
-        if (this.keysPressed['ArrowUp'] && this.yPos > 0) {
+        if (this.checkFromKeyBinds('forward') && this.yPos > 0) {
             this.yPos -= this.speed;
         }
-        if (this.keysPressed['ArrowDown'] && this.yPos < this.gameInstance.gameViewHeight - this.sprite.height + sideYLimit) {
+        if (this.checkFromKeyBinds('backward') && this.yPos < this.gameInstance.gameViewHeight - this.sprite.height + sideYLimit) {
             this.yPos += this.speed;
         }
-        if (this.keysPressed['ArrowLeft'] && this.xPos > 0 - sideXLimit) {
+        if (this.checkFromKeyBinds('left') && this.xPos > 0 - sideXLimit) {
             this.xPos -= this.speed;
         }
-        if (this.keysPressed['ArrowRight'] && this.xPos < this.gameInstance.gameViewWidth - this.sprite.width + sideXLimit) {
+        if (this.checkFromKeyBinds('right') && this.xPos < this.gameInstance.gameViewWidth - this.sprite.width + sideXLimit) {
             this.xPos += this.speed;
         }
     }

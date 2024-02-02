@@ -1,0 +1,21 @@
+{
+    "forward": [
+        "z",
+        "ArrowUp"
+    ],
+    "backward": [
+        "s",
+        "ArrowDown"
+    ],
+    "left": [
+        "q",
+        "ArrowLeft"
+    ],
+    "right": [
+        "d",
+        "ArrowRight"
+    ],
+    "shoot": [
+        " "
+    ]
+}
