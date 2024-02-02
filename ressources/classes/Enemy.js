@@ -1,6 +1,6 @@
 export class Enemy {
     speed = 3;
-    life = 0;
+    life = 2;
 
     xPos = 0;
     yPos = 0;

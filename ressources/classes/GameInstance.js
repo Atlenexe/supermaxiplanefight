@@ -33,46 +33,63 @@ export class GameInstance {
     //Initialiser les entités
     initEntities() {
         this.spawnPlayer();
-        this.spawnEnemy();
+        this.spawnEnemy(true);
     }
 
     spawnPlayer() {
         const playerSpawnX = this.gameViewWidth / 2;
         const playerSpawnY = this.gameViewHeight;
 
-        const player = new Player(0, 0, this, this.keyboard);
-
-        player.xPos = playerSpawnX - player.sprite.width / 2;
-        player.yPos = playerSpawnY - player.sprite.height;
+        const player = new Player(-150, 0, this, this.keyboard);
         this.player = player;
+
+        //On attend que l'image du joueur soit chargée pour définir sa position
+        player.sprite.onload = () => {
+            player.xPos = playerSpawnX - player.sprite.width / 2;
+            player.yPos = playerSpawnY - player.sprite.height;
+        };
     }
 
-    spawnEnemy() {
-        const enemy = new Enemy(0, 0);
+    spawnEnemy(isFirstSpawn) {
+        const enemy = new Enemy(-100, 0);
 
         this.enemyEntityList.push(enemy);
 
-        const enemySpawnX = Math.random() * (this.gameViewWidth - enemy.sprite.width);
+        let enemySpawnX = 0;
+
+        if (isFirstSpawn) {
+            enemySpawnX = this.gameViewWidth / 2 - enemy.sprite.width / 2;
+        } else {
+            enemySpawnX = Math.random() * (this.gameViewWidth - enemy.sprite.width);
+        }
+
         const enemySpawnY = -enemy.sprite.height - 100;
 
-        enemy.xPos = enemySpawnX;
-        enemy.yPos = enemySpawnY;
+        enemy.sprite.onload = () => {
+            enemy.xPos = enemySpawnX;
+            enemy.yPos = enemySpawnY;
+        }
     }
 
     updateGame() {
         setInterval(() => {
             this.updateView();
 
-            this.enemyEntityList.forEach(enemyEntity => {
-                this.checkFireCollision(enemyEntity);
-                this.checkPlayerCollision(enemyEntity);
-            });
-
             if (this.keyboard.checkTappedKey('start')) {
                 this.startGame();
             }
 
-            this.killEntities();
+            if (this.gameState === GameStates.inGame) {
+                this.enemyEntityList.forEach(enemyEntity => {
+                    this.checkFireCollision(enemyEntity);
+                    this.checkPlayerCollision(enemyEntity);
+                });
+                this.killEntities();
+
+                if (this.player.life <= 0) {
+                    this.gameOver();
+                }
+            }
         }, 1000 / 60);
     }
 
@@ -87,10 +104,11 @@ export class GameInstance {
         this.ctx.fillStyle = "blue";
         this.ctx.fillRect(0, 0, this.gameViewWidth, this.gameViewHeight);
 
-        //Afficher les entités
-        this.drawPlayer();
-        this.drawFires();
-        this.drawEnemies();
+        if (this.gameState === GameStates.inGame) {
+            this.drawPlayer();
+            this.drawFires();
+            this.drawEnemies();
+        }
     }
 
     //Afficher le joueur
@@ -126,7 +144,11 @@ export class GameInstance {
         this.enemyEntityList.forEach(enemyEntity => {
             if (enemyEntity.yPos > this.gameViewHeight + enemyEntity.sprite.height) {
                 this.enemyEntityList.splice(this.enemyEntityList.indexOf(enemyEntity), 1);
-                this.spawnEnemy();
+                this.player.life--;
+
+                if (this.player.life >= 0) {
+                    this.spawnEnemy();
+                }
             }
         });
     }
@@ -146,9 +168,16 @@ export class GameInstance {
             const fireInYRange = fireEntity.yPos > enemyEntity.yPos + enemyEntity.sprite.height * 1 / 2 && fireEntity.yPos < enemyEntity.yPos + enemyEntity.sprite.height * 3 / 4;
 
             if (fireInXRange && fireInYRange) {
-                this.killEnemyEntity(enemyEntity);
+                enemyEntity.life--;
+                this.player.score += 10;
+
+                if (enemyEntity.life <= 0) {
+                    this.player.score += 10;
+                    this.killEnemyEntity(enemyEntity);
+                    this.spawnEnemy();
+                }
+
                 this.killFireEntity(fireEntity);
-                this.spawnEnemy();
             }
         });
     }
@@ -159,8 +188,19 @@ export class GameInstance {
         const playerInYRange = this.player.yPos + this.player.sprite.height * 1 / 4 > enemyEntity.yPos && this.player.yPos < enemyEntity.yPos + enemyEntity.sprite.height;
 
         if (playerInXRange && playerInYRange) {
-            this.killEnemyEntity(enemyEntity);
-            this.spawnEnemy();
+            this.player.life -= 2;
+
+            if (this.player.life >= 0) {
+                this.killEnemyEntity(enemyEntity);
+                this.spawnEnemy();
+            }
         }
+    }
+
+    gameOver() {
+        this.fireEntityList = [];
+        this.enemyEntityList = [];
+        this.gameState = GameStates.gameOver;
+        delete this.player;
     }
 }

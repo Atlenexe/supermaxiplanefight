@@ -4,7 +4,7 @@ export class Player {
     xSpeed = 12;
     ySpeed = 8;
 
-    life = 0;
+    life = 5;
     score = 0;
 
     xPos = 0;
