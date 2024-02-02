@@ -40,7 +40,7 @@ export class GameInstance {
         const playerSpawnX = this.gameViewWidth / 2;
         const playerSpawnY = this.gameViewHeight;
 
-        const player = new Player(-150, 0, this, this.keyboard);
+        const player = new Player(-150, -100, this, this.keyboard);
         this.player = player;
 
         //On attend que l'image du joueur soit chargée pour définir sa position
@@ -51,21 +51,14 @@ export class GameInstance {
     }
 
     spawnEnemy(isFirstSpawn) {
-        const enemy = new Enemy(-100, 0);
+        const enemy = new Enemy(-100, -100);
 
         this.enemyEntityList.push(enemy);
 
-        let enemySpawnX = 0;
-
-        if (isFirstSpawn) {
-            enemySpawnX = this.gameViewWidth / 2 - enemy.sprite.width / 2;
-        } else {
-            enemySpawnX = Math.random() * (this.gameViewWidth - enemy.sprite.width);
-        }
-
-        const enemySpawnY = -enemy.sprite.height - 100;
-
         enemy.sprite.onload = () => {
+            const enemySpawnX = isFirstSpawn ? (this.gameViewWidth - enemy.sprite.width) / 2 : Math.random() * (this.gameViewWidth - enemy.sprite.width);
+            const enemySpawnY = -enemy.sprite.height - 100;
+
             enemy.xPos = enemySpawnX;
             enemy.yPos = enemySpawnY;
         }
