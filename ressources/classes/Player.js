@@ -2,7 +2,9 @@ import { Fire } from './Fire.js';
 import keyBinds from '../config/keyBinds.json' assert { type: 'json' };
 
 export class Player {
-    speed = 8;
+    xSpeed = 12;
+    ySpeed = 8;
+
     life = 0;
     score = 0;
 
@@ -63,16 +65,16 @@ export class Player {
 
         //Calculer la nouvelle position du joueur en fonction des touches pressées
         if (this.checkFromKeyBinds('forward') && this.yPos > 0) {
-            this.yPos -= this.speed;
+            this.yPos -= this.ySpeed;
         }
         if (this.checkFromKeyBinds('backward') && this.yPos < this.gameInstance.gameViewHeight - this.sprite.height + sideYLimit) {
-            this.yPos += this.speed;
+            this.yPos += this.ySpeed;
         }
         if (this.checkFromKeyBinds('left') && this.xPos > 0 - sideXLimit) {
-            this.xPos -= this.speed;
+            this.xPos -= this.xSpeed;
         }
         if (this.checkFromKeyBinds('right') && this.xPos < this.gameInstance.gameViewWidth - this.sprite.width + sideXLimit) {
-            this.xPos += this.speed;
+            this.xPos += this.xSpeed;
         }
     }
 

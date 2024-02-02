@@ -53,11 +53,10 @@ export class GameInstance {
         setInterval(() => {
             this.drawGameView();
 
-            if (this.fireEntityList.length > 0) {
-                this.enemyEntityList.forEach(enemyEntity => {
-                    this.checkFireCollision(enemyEntity);
-                });
-            }
+            this.enemyEntityList.forEach(enemyEntity => {
+                this.checkFireCollision(enemyEntity);
+                this.checkPlayerCollision(enemyEntity);
+            });
         }, 1000 / 60);
     }
 
@@ -123,8 +122,9 @@ export class GameInstance {
 
     checkFireCollision(enemyEntity) {
         this.fireEntityList.forEach(fireEntity => {
+            //Hitbox de l'ennemi
             const fireInXRange = fireEntity.xPos > enemyEntity.xPos && fireEntity.xPos < enemyEntity.xPos + enemyEntity.sprite.width;
-            const fireInYRange = fireEntity.yPos > enemyEntity.yPos && fireEntity.yPos < enemyEntity.yPos + enemyEntity.sprite.height * 3 / 4;
+            const fireInYRange = fireEntity.yPos > enemyEntity.yPos + enemyEntity.sprite.height * 1/2 && fireEntity.yPos < enemyEntity.yPos + enemyEntity.sprite.height * 3 / 4;
 
             if (fireInXRange && fireInYRange) {
                 this.killEnemyEntity(enemyEntity);
@@ -132,5 +132,16 @@ export class GameInstance {
                 this.spawnEnemy();
             }
         });
+    }
+
+    checkPlayerCollision(enemyEntity) {
+        //Hitbox de l'ennemi
+        const playerInXRange = this.player.xPos + this.player.sprite.width > enemyEntity.xPos + enemyEntity.sprite.width * 3/4 && this.player.xPos < enemyEntity.xPos + enemyEntity.sprite.width - enemyEntity.sprite.width * 3/4;
+        const playerInYRange = this.player.yPos + this.player.sprite.height * 1/4 > enemyEntity.yPos && this.player.yPos < enemyEntity.yPos + enemyEntity.sprite.height;
+
+        if (playerInXRange && playerInYRange) {
+            this.killEnemyEntity(enemyEntity);
+            this.spawnEnemy();
+        }
     }
 }
