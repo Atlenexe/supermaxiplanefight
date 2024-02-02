@@ -1,5 +1,6 @@
 import { Player } from "./Player.js";
 import { Enemy } from "./Enemy.js";
+import { keyboard } from './KeyBoard.js';
 import { GameStates } from "../enums/GameStates.js";
 
 export class GameInstance {
@@ -7,6 +8,7 @@ export class GameInstance {
     gameViewWidth = 0;
     player = null;
     ctx = null;
+    keyboard = new keyboard();
     fireEntityList = [];
     enemyEntityList = [];
 
@@ -38,7 +40,7 @@ export class GameInstance {
         const playerSpawnX = this.gameViewWidth / 2;
         const playerSpawnY = this.gameViewHeight;
 
-        const player = new Player(0, 0, this);
+        const player = new Player(0, 0, this, this.keyboard);
 
         player.xPos = playerSpawnX - player.sprite.width / 2;
         player.yPos = playerSpawnY - player.sprite.height;
