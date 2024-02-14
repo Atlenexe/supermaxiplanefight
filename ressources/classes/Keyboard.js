@@ -26,7 +26,7 @@ export class keyboard {
         delete this.keysTapped[event.key];
     }
 
-    checkTappedKey(key) {
+    checkTappedFromKeyBinds(key) {
         //Vérifier si une touche est tapée depuis le fichier config de touches (envoie vrai une seule fois)
         const binds = keyBinds[key] || [key];
         return binds.some(bind => {

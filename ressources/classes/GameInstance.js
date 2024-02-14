@@ -68,7 +68,7 @@ export class GameInstance {
         setInterval(() => {
             this.updateView();
 
-            if (this.keyboard.checkTappedKey('start')) {
+            if (this.keyboard.checkTappedFromKeyBinds('start')) {
                 this.startGame();
             }
 

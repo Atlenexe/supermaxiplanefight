@@ -26,7 +26,7 @@ export class Player {
         const sideXLimit = this.sprite.width / 2;
         const sideYLimit = this.sprite.height / 2;
 
-        if (this.keyboard.checkTappedKey('shoot')) {
+        if (this.keyboard.checkTappedFromKeyBinds('shoot')) {
             this.shoot();
         }
 
